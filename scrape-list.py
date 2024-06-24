@@ -16,12 +16,14 @@ from parser import parser
 #for phrase in text.split('\n'):
 #    phrases.append(phrase.split())
 #
-#def get_initials(phrase):
-#    return ''.join([word[0].lower() for word in phrase])
+def get_initials(phrase):
+    return ''.join([word[0].lower() for word in phrase])
 
 def search_for_phrase(initials):
+    phrases = []
     for phrase in parser().fetch_category("English idioms"):
         if get_initials(phrase) == initials:
-            return ' '.join(phrase)
-print(parser().fetch_category("English idioms"))
-#    return 'Phrase for acronym not found'
+            phrases.append(phrase)
+    return phrases
+
+print(search_for_phrase('af'))

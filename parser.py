@@ -15,7 +15,6 @@ class parser(object):
     def parse_category_words(self):
         words_content = self.soup.find('div', {'id': 'mw-pages'}).find('div', {'class': 'mw-content-ltr'})
         words = [word.text for word in words_content.find_all('a')]
-        print(words)
         return words
 
     def get_category_data(self, category):
@@ -28,6 +27,7 @@ class parser(object):
             self.clean_html()
             next_page_links = self.parse_next_page_links(category)
         words += self.parse_category_words()
+        return words
 
     def fetch_category(self, category):
         category = "Category:" + category
