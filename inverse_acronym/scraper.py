@@ -2,10 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 
 class Scraper():
-    def __init__(self) -> None:
-        for result in self.query({'action':'query','list':'categorymembers','cmtitle':'Category:English_idioms', 'cmprop':'title','cmlimit':'max'}):
-            print(result)
+    def __init__(self, category_title) -> None:
+        self._category_title = category_title
 
+    def get_requests(self):
+        for result in self.query({'action':'query','list':'categorymembers','cmtitle':f'Category:{self._category_title}', 'cmprop':'title','cmlimit':'max'}):
+            for member in result['categorymembers']:
+                print(member['title'])
+        
     def query(self, request):
         request['action'] = 'query'
         request['format'] = 'json'
