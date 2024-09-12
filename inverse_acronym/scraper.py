@@ -1,14 +1,17 @@
 import requests
-from bs4 import BeautifulSoup
+from unidecode import unidecode
 
 class Scraper():
     def __init__(self, category_title) -> None:
         self._category_title = category_title
+        self._dict = {}
 
     def get_requests(self):
-        for result in self.query({'action':'query','list':'categorymembers','cmtitle':f'Category:{self._category_title}', 'cmprop':'title','cmlimit':'max'}):
+        for result in self.query({'list':'categorymembers','cmtitle':f'Category:{self._category_title}', 'cmprop':'title','cmlimit':'max'}):
+            print('loading...')
             for member in result['categorymembers']:
-                print(member['title'])
+                initials = unidecode(self._get_initials(member['title']).lower())
+                self._dict[initials] = member['title']
         
     def query(self, request):
         request['action'] = 'query'
@@ -28,3 +31,11 @@ class Scraper():
                 break
             last_continue = result['continue']
 
+    def _get_initials(self, text):
+        return ''.join([word[0] for word in text.split()])
+
+    def get_results(self, acronym):
+        if acronym in self._dict:
+            return self._dict[acronym]
+        else:
+            return "I'm sorry please try another acronym"
