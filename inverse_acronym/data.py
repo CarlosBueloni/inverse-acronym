@@ -1,7 +1,7 @@
 import requests
 from unidecode import unidecode
 
-class Scraper():
+class Data():
     def __init__(self, category_title) -> None:
         self._category_title = category_title
         self._dict = {}
