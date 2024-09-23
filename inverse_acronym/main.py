@@ -1,12 +1,14 @@
 from data import Data
 
 def main():
+    data = Data()
     category = input("Enter the category: ")
-    new_scraper = Scraper(category)
-    new_scraper.get_requests()
+    while category != '0':
+        data.get_requests(category)
+        category = input("Enter the category (type 0 to continue): ")
     acronym = input("Enter the acronym (type 0 to close): ")
     while acronym != '0':
-        print(new_scraper.get_results(acronym))
+        print(data.get_results(acronym))
         acronym = input("Enter the acronym (type 0 to close): ")
 
 

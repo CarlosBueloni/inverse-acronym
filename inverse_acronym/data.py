@@ -2,17 +2,23 @@ import requests
 from unidecode import unidecode
 
 class Data():
-    def __init__(self, category_title) -> None:
-        self._category_title = category_title
+    def __init__(self) -> None:
         self._dict = {}
 
-    def get_requests(self):
-        for result in self.query({'list':'categorymembers','cmtitle':f'Category:{self._category_title}', 'cmprop':'title','cmlimit':'max'}):
+    def get_requests(self, category):
+        for result in self.query({'list':'categorymembers','cmtitle':f'Category:{category}', 'cmprop':'title','cmlimit':'max'}):
             print('loading...')
+            if category not in self._dict:
+                self._dict[category] = {}
             for member in result['categorymembers']:
                 initials = unidecode(self._get_initials(member['title']).lower())
-                self._dict[initials] = member['title']
-        
+                if member['title'].startswith("Appendix:") or member['title'].startswith("Category:"):
+                    continue
+                if initials in self._dict[category]:
+                    self._dict[category][initials].append(member['title'])
+                else:
+                    self._dict[category][initials] = [member['title']]
+
     def query(self, request):
         request['action'] = 'query'
         request['format'] = 'json'
@@ -35,7 +41,8 @@ class Data():
         return ''.join([word[0] for word in text.split()])
 
     def get_results(self, acronym):
-        if acronym in self._dict:
-            return self._dict[acronym]
-        else:
-            return "I'm sorry please try another acronym"
+        results = []
+        for category in self._dict.keys():
+            if acronym in self._dict[category]:
+                results.extend(self._dict[category][acronym])
+        return results
