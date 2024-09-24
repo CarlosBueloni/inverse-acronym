@@ -1,23 +1,26 @@
 import requests
 from unidecode import unidecode
+import json
 
 class Data():
     def __init__(self) -> None:
         self._dict = {}
+        self.read_from_file()
 
     def get_requests(self, category):
-        for result in self.query({'list':'categorymembers','cmtitle':f'Category:{category}', 'cmprop':'title','cmlimit':'max'}):
-            print('loading...')
-            if category not in self._dict:
-                self._dict[category] = {}
-            for member in result['categorymembers']:
-                initials = unidecode(self._get_initials(member['title']).lower())
-                if member['title'].startswith("Appendix:") or member['title'].startswith("Category:"):
-                    continue
-                if initials in self._dict[category]:
-                    self._dict[category][initials].append(member['title'])
-                else:
-                    self._dict[category][initials] = [member['title']]
+        if category not in self._dict:
+            self._dict[category] = {}
+            for result in self.query({'list':'categorymembers','cmtitle':f'Category:{category}', 'cmprop':'title','cmlimit':'max'}):
+                print('loading...')
+                for member in result['categorymembers']:
+                    initials = unidecode(self._get_initials(member['title']).lower())
+                    if member['title'].startswith("Appendix:") or member['title'].startswith("Category:"):
+                        continue
+                    if initials in self._dict[category]:
+                        self._dict[category][initials].append(member['title'])
+                    else:
+                        self._dict[category][initials] = [member['title']]
+            self.write_to_file()
 
     def query(self, request):
         request['action'] = 'query'
@@ -46,3 +49,15 @@ class Data():
             if acronym in self._dict[category]:
                 results.extend(self._dict[category][acronym])
         return results
+    
+    def write_to_file(self):
+        with open('categories.json', 'w') as file:
+            json.dump(self._dict, file, ensure_ascii=False, indent=4)
+            
+    def read_from_file(self):
+        try:
+            with open('categories.json') as file:
+                    self._dict = json.load(file)
+        except:
+            return {}
+
