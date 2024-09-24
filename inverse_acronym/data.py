@@ -6,11 +6,15 @@ class Data():
     def __init__(self) -> None:
         self._dict = {}
         self.read_from_file()
+        self._file_name = 'categories.json'
 
     def get_requests(self, category):
         if category not in self._dict:
             self._dict[category] = {}
             for result in self.query({'list':'categorymembers','cmtitle':f'Category:{category}', 'cmprop':'title','cmlimit':'max'}):
+                if len(result['categorymembers']) == 0:
+                    print("Category does not exists, please try again.")
+                    return
                 print('loading...')
                 for member in result['categorymembers']:
                     initials = unidecode(self._get_initials(member['title']).lower())
@@ -48,16 +52,21 @@ class Data():
         for category in self._dict.keys():
             if acronym in self._dict[category]:
                 results.extend(self._dict[category][acronym])
-        return results
-    
+        return results if results else "I'm sorry please try another acronym"
+
+    def delete_category(self, category):
+        if category in self._dict.keys():
+            self._dict.pop(category, None)
+        self.write_to_file()
+
     def write_to_file(self):
-        with open('categories.json', 'w') as file:
+        with open(self._file_name, 'w') as file:
             json.dump(self._dict, file, ensure_ascii=False, indent=4)
-            
+
     def read_from_file(self):
         try:
-            with open('categories.json') as file:
+            with open(self._file_name) as file:
                     self._dict = json.load(file)
         except:
-            return {}
+            pass
 
