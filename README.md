@@ -1,4 +1,4 @@
-Personal Portfolio - DJANGO
+Personal Project - INVERSE ACRONYM
 ============================
 A simple project to make inverse acronyms
 
@@ -24,13 +24,13 @@ For example:
 You need at least python 3.9 installed.
 + Install poetry
 ```
-$pip install poetry
+$ pip install poetry
 ```
 + Run ```poetry install``` inside root folder
 ```
-$pipenv install 
+$ poetry install 
 ```
-+ And finally run django server
++ And finally to run
 ```
-$ python manage.py runserver
+$ poetry run python3 inverse-acronym/main.py
 ```
