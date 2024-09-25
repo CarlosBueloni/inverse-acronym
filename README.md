@@ -21,7 +21,7 @@ For example:
 
 
 ## Setup
-You need at least python 3.9 installed.
+You need at least python 3.12 installed.
 + Install poetry
 ```
 $ pip install poetry
