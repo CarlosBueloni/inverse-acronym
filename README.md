@@ -13,8 +13,8 @@ Table Of Contents
 This project lets the user pull category lists from wikitionary and use them to search for inverse acronyms
 For example:
 - searching for *bv* in *English_idioms* categoty would return:
-  1 - bird's-eye view
-  2 - broken vessel
+1 - bird's-eye view
+2 - broken vessel
 
 ## Technologies
 * Python version: 3.12
