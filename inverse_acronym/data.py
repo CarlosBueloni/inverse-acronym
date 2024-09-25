@@ -5,8 +5,8 @@ import json
 class Data():
     def __init__(self) -> None:
         self._dict = {}
-        self.read_from_file()
         self._file_name = 'categories.json'
+        self.read_from_file()
 
     def get_requests(self, category):
         if category not in self._dict:
@@ -52,12 +52,15 @@ class Data():
         for category in self._dict.keys():
             if acronym in self._dict[category]:
                 results.extend(self._dict[category][acronym])
-        return results if results else "I'm sorry please try another acronym"
+        return results
 
     def delete_category(self, category):
         if category in self._dict.keys():
             self._dict.pop(category, None)
         self.write_to_file()
+
+    def get_categories(self):
+        return list(self._dict.keys())
 
     def write_to_file(self):
         with open(self._file_name, 'w') as file:

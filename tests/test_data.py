@@ -15,7 +15,7 @@ class TestData:
         new_data._dict = {'':{}}
         new_data._dict['']['hw'] = ['hello world']
         assert new_data.get_results(x) == ["hello world"]
-        assert new_data.get_results("dfsfd") == "I'm sorry please try another acronym" 
+        assert new_data.get_results("dfsfd") == [] 
 
     def test_get_requests(self):
         new_data = Data()
